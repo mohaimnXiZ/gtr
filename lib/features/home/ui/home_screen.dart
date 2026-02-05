@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gtr/core/utils/app_constants.dart';
 import 'package:gtr/core/widgets/button.dart';
 import 'package:gtr/core/widgets/icon.dart';
@@ -83,7 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: CustomIcon(icon: Iconsax.notification, color: Colors.white),
                 ),
                 SizedBox(width: 12),
-                LocalImage(img: "avatar", type: "png", size: 40),
+                InkWell(
+                  onTap: () {
+                    context.push('/profile');
+                  },
+                  child: LocalImage(img: "avatar", type: "png", size: 40),
+                ),
               ],
             ),
           ),
@@ -127,7 +133,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(color: Colors.white.withAlpha(53), borderRadius: BorderRadius.circular(100)),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(53),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
                         child: LocalImage(img: "car-logo", type: "svg", size: 36),
                       ),
                       CustomText(text: "Mercedes", color: Colors.white),
@@ -148,7 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: index == 0 ? const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)) : null,
+        borderRadius: index == 0
+            ? const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
+            : null,
       ),
       child: Container(
         decoration: BoxDecoration(color: Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(16)),
@@ -162,7 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   img: "car4",
                   type: "png",
                   height: MediaQuery.of(context).size.height * 0.25,
-                  alternativeBorderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                  alternativeBorderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
                 ),
                 Positioned(
                   left: 8,
@@ -186,7 +200,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: CustomText(text: "Ferrari Convertible", fontWeight: FontWeight.w800, fontSize: 18),
+                        child: CustomText(
+                          text: "Ferrari Convertible",
+                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                        ),
                       ),
                       CircleAvatar(
                         backgroundColor: Colors.white,
@@ -201,13 +219,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: List.generate(4, (index) {
                       return Container(
                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Color(0xFF3D923A).withAlpha(12)),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Color(0xFF3D923A).withAlpha(12),
+                        ),
                         child: CustomText(text: "Car Tag Chip", fontSize: 12),
                       );
                     }),
                   ),
                   SizedBox(height: 8),
-                  CustomText(text: "1700", decoration: TextDecoration.lineThrough, color: Theme.of(context).hintColor),
+                  CustomText(
+                    text: "1700",
+                    decoration: TextDecoration.lineThrough,
+                    color: Theme.of(context).hintColor,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -299,7 +324,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
         backgroundColor: themeColor,
         body: Offstage(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [_buildStationaryPart(), _buildMovingPart()]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [_buildStationaryPart(), _buildMovingPart()],
+          ),
         ),
       );
     }
@@ -320,7 +348,12 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: themeColor,
             ),
           ),
-          SliverList(delegate: SliverChildBuilderDelegate((context, index) => _buildContentPart(context, index), childCount: 6)),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildContentPart(context, index),
+              childCount: 6,
+            ),
+          ),
         ],
       ),
     );

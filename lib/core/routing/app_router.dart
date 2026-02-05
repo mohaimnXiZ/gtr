@@ -7,15 +7,19 @@ import 'package:gtr/features/auth/ui/otp_screen.dart';
 import 'package:gtr/features/auth/ui/register_screen.dart';
 import 'package:gtr/features/auth/ui/reset_password_screen.dart';
 import 'package:gtr/features/main/ui/boarding_screen.dart';
+import 'package:gtr/features/profile/ui/privacy_policy_screen.dart';
+import 'package:gtr/features/profile/ui/profile_screen.dart';
+import 'package:gtr/features/profile/ui/terms_and_conditions_screen.dart';
 
 import '../../features/home/ui/home_screen.dart';
 import '../../features/main/ui/splash_screen.dart';
+import '../../features/profile/ui/edit_profile_screen.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 final appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/profile',
   routes: [
     GoRoute(
       path: '/',
@@ -76,6 +80,38 @@ final appRouter = GoRouter(
       name: 'home',
       pageBuilder: (context, state) {
         return buildPage(key: state.pageKey, child: const HomeScreen(), transition: fadeSlideLR);
+      },
+    ),
+
+    GoRoute(
+      path: '/profile',
+      name: 'profile',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const ProfileScreen(), transition: homeScreenWithOverlayResponse);
+      },
+    ),
+
+    GoRoute(
+      path: '/edit-profile',
+      name: 'edit-profile',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const EditProfileScreen(), transition: homeScreenWithOverlayResponse);
+      },
+    ),
+
+    GoRoute(
+      path: '/terms',
+      name: 'terms',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const TermsAndConditionsScreen(), transition: homeScreenWithOverlayResponse);
+      },
+    ),
+
+    GoRoute(
+      path: '/privacy',
+      name: 'privacy',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const PrivacyPolicyScreen(), transition: homeScreenWithOverlayResponse);
       },
     ),
   ],
