@@ -10,7 +10,7 @@ class TermsAndConditionsScreen extends StatefulWidget {
   @override
   State<TermsAndConditionsScreen> createState() => _TermsAndConditionsScreenState();
 }
-
+   
 class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
   @override
   Widget build(BuildContext context) {
