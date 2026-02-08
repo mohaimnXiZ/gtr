@@ -8,6 +8,7 @@ import 'package:gtr/core/widgets/icon_button.dart';
 import 'package:gtr/core/widgets/local_image.dart';
 import 'package:gtr/core/widgets/text.dart';
 import 'package:gtr/core/widgets/text_fields.dart';
+import 'package:gtr/features/home/component/product_card.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -122,25 +123,43 @@ class _HomeScreenState extends State<HomeScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: List.generate(9, (index) {
+              children: List.generate(10, (index) {
+                final bool isLastItem = index == 9;
                 return Padding(
-                  padding: EdgeInsets.only(left: index == 0 ? 16 : 8, right: index == 8 ? 16 : 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(53),
-                          borderRadius: BorderRadius.circular(100),
+                  padding: EdgeInsets.only(left: index == 0 ? 16 : 8, right: isLastItem ? 16 : 0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      if (isLastItem) {
+                        context.push('/all-categories');
+                      } else {}
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 68,
+                          height: 68,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(53),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: isLastItem
+                              ? const Text(
+                                  "All",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                )
+                              : LocalImage(img: "car-logo", type: "svg", size: 36),
                         ),
-                        child: LocalImage(img: "car-logo", type: "svg", size: 36),
-                      ),
-                      CustomText(text: "Mercedes", color: Colors.white),
-                    ],
+                        const SizedBox(height: 8),
+                        CustomText(text: isLastItem ? "View All" : "Mercedes", color: Colors.white),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -148,170 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 16),
         ],
-      ),
-    );
-  }
-
-  Widget _buildContentPart(BuildContext context, int index) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: index == 0
-            ? const BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
-            : null,
-      ),
-      child: Container(
-        decoration: BoxDecoration(color: Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(16)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                LocalImage(
-                  img: "car4",
-                  type: "png",
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  alternativeBorderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                ),
-                Positioned(
-                  left: 8,
-                  bottom: 8,
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: LocalImage(img: "car-logo", type: "svg", size: 24),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.all(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomText(
-                          text: "Ferrari Convertible",
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18,
-                        ),
-                      ),
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: CustomIcon(icon: Iconsax.heart),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: List.generate(4, (index) {
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: Color(0xFF3D923A).withAlpha(12),
-                        ),
-                        child: CustomText(text: "Car Tag Chip", fontSize: 12),
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 8),
-                  CustomText(
-                    text: "1700",
-                    decoration: TextDecoration.lineThrough,
-                    color: Theme.of(context).hintColor,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomText(
-                          text: "AED 1000/Day",
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomText(
-                          text: "AED 1000/Mo",
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w800,
-                          textAlign: TextAlign.end,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CustomIcon(icon: Iconsax.bag),
-                            SizedBox(height: 8),
-                            CustomText(text: "2 Bags"),
-                          ],
-                        ),
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        flex: 4,
-                        child: CustomButton(onTap: () {}, title: "Car Details", verticalPadding: 10),
-                      ),
-                      SizedBox(width: 8),
-                      Flexible(
-                        flex: 1,
-                        child: CustomButton(
-                          onTap: () {},
-                          color: Color(0xFF777777),
-                          borderRadius: BorderRadius.circular(16),
-                          verticalPadding: 10,
-                          child: LocalImage(img: "phone", type: "svg", size: 24),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Flexible(
-                        flex: 1,
-                        child: CustomButton(
-                          onTap: () {},
-                          color: Color(0xFF25D366),
-                          borderRadius: BorderRadius.circular(16),
-                          verticalPadding: 10,
-                          child: LocalImage(img: "whatsapp", type: "svg", size: 24),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -350,7 +205,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildContentPart(context, index),
+              (context, index) => ProductCard(
+                carName: "Ferrari Convertible",
+                carImage: "car4",
+                carLogo: "car-logo",
+                dailyPrice: "18000",
+                monthlyPrice: "13204",
+                tags: ["sport", "good", "fast"],
+                onDetailsTap: () {},
+                onPhoneTap: () {},
+                onWhatsappTap: () {},
+              ),
               childCount: 6,
             ),
           ),

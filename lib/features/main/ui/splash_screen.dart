@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       final String? token = preferences?.getString('token');
 
-      context.go('/login');
+      context.go('/main');
 
       // if (token != null && token.isNotEmpty) {
       //   context.go('/home');

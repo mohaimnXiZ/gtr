@@ -6,7 +6,9 @@ import 'package:gtr/features/auth/ui/otp_method_screen.dart';
 import 'package:gtr/features/auth/ui/otp_screen.dart';
 import 'package:gtr/features/auth/ui/register_screen.dart';
 import 'package:gtr/features/auth/ui/reset_password_screen.dart';
+import 'package:gtr/features/home/ui/all_categories_screen.dart';
 import 'package:gtr/features/main/ui/boarding_screen.dart';
+import 'package:gtr/features/main/ui/main_screen.dart';
 import 'package:gtr/features/profile/ui/privacy_policy_screen.dart';
 import 'package:gtr/features/profile/ui/profile_screen.dart';
 import 'package:gtr/features/profile/ui/terms_and_conditions_screen.dart';
@@ -19,7 +21,7 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(deb
 
 final appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/profile',
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
@@ -81,6 +83,12 @@ final appRouter = GoRouter(
       pageBuilder: (context, state) {
         return buildPage(key: state.pageKey, child: const HomeScreen(), transition: fadeSlideLR);
       },
+    ),GoRoute(
+      path: '/main',
+      name: 'main',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const MainScreen(), transition: fadeSlideLR);
+      },
     ),
 
     GoRoute(
@@ -112,6 +120,14 @@ final appRouter = GoRouter(
       name: 'privacy',
       pageBuilder: (context, state) {
         return buildPage(key: state.pageKey, child: const PrivacyPolicyScreen(), transition: homeScreenWithOverlayResponse);
+      },
+    ),
+
+    GoRoute(
+      path: '/all-categories',
+      name: 'all-categories',
+      pageBuilder: (context, state) {
+        return buildPage(key: state.pageKey, child: const AllCategoriesScreen(), transition: homeScreenWithOverlayResponse);
       },
     ),
   ],

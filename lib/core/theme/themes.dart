@@ -14,8 +14,10 @@ class AppThemes {
       onSecondary: AppColors.backgroundLight,
       tertiary: AppColors.successLight,
       error: AppColors.errorLight,
+      outline: AppColors.outlineLight,
+      onPrimaryContainer: AppColors.cardLight
     ),
-    dividerColor: AppColors.textSecondaryLight,
+    dividerColor: AppColors.dividerLight,
     canvasColor: AppColors.backgroundLight,
     hintColor: AppColors.textSecondaryLight,
     primaryColor: AppColors.primaryLight,
@@ -41,8 +43,10 @@ class AppThemes {
       onSecondary: AppColors.backgroundDark,
       tertiary: AppColors.successDark,
       error: AppColors.errorDark,
+      outline: AppColors.outlineDark,
+      onPrimaryContainer: AppColors.cardDark
     ),
-    dividerColor: AppColors.textSecondaryDark,
+    dividerColor: AppColors.dividerDark,
     canvasColor: AppColors.backgroundDark,
     hintColor: AppColors.textSecondaryDark,
     primaryColor: AppColors.primaryDark,

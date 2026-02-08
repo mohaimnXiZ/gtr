@@ -60,10 +60,10 @@ class _ResponsiveGridState extends State<ResponsiveGrid> {
   }
 
   int _getCrossAxisCount(double width) {
-    if (width < 350) return 1;
-    if (width < 600) return 2;
-    if (width < 900) return 3;
-    return 4;
+    if (width < 350) return 2;
+    if (width < 600) return 4;
+    if (width < 900) return 6;
+    return 6;
   }
 
   @override
