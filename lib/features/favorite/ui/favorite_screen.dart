@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gtr/core/widgets/app_bar.dart';
+import 'package:gtr/core/widgets/responsive_grid.dart';
 import 'package:gtr/core/widgets/text.dart';
 import 'package:gtr/features/favorite/component/favorite_Product_card.dart';
-import 'package:gtr/features/search/component/search_grid.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -14,15 +14,15 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   final List<Map<String, String>> favoriteCars = [
     {
-      "name": "Mclaren 750S",
+      "name": "Mclaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaren 750S",
       "image": "car7",
-      "price": "2200",
-      "hp": "520",
-      "trans": "Automatic",
-      "seats": "2",
+      "price": "22aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00",
+      "hp": "52aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0",
+      "trans": "Autaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaomatic",
+      "seats": "2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     },
     {
-      "name": "Ferrari Convertible",
+      "name": "Ferraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaari Convertible",
       "image": "car6",
       "price": "2200",
       "hp": "520",
@@ -32,7 +32,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     {
       "name": "Mclaren 750S",
       "image": "car8",
-      "price": "2200",
+      "price": "2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa200",
       "hp": "520",
       "trans": "Automatic",
       "seats": "2",
@@ -41,7 +41,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       "name": "Ferrari Convertible",
       "image": "car7",
       "price": "2200",
-      "hp": "520",
+      "hp": "52aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0",
       "trans": "Automatic",
       "seats": "2",
     },
@@ -50,7 +50,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       "image": "car7",
       "price": "2200",
       "hp": "520",
-      "trans": "Automatic",
+      "trans": "Automaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaatic",
       "seats": "2",
     },
     {
@@ -59,7 +59,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       "price": "2200",
       "hp": "520",
       "trans": "Automatic",
-      "seats": "2",
+      "seats": "2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     },
     {
       "name": "Mclaren 750S",
@@ -88,7 +88,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               )
             : ListView(
                 children: [
-                  SearchGrid(
+                  ResponsiveGrid(
+                    forFavoriteScreen: true,
                     itemCount: favoriteCars.length,
                     itemBuilder: (BuildContext context, index) {
                       final car = favoriteCars[index];

@@ -177,7 +177,6 @@ class _SearchProductCardState extends State<SearchProductCard> with SingleTicker
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

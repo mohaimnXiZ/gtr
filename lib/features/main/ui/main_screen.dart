@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
 
     _pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1),
       curve: Curves.easeInOut,
     );
   }
@@ -109,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
             borderRadius: BorderRadius.circular(100),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black,
                 blurRadius: 20,
                 offset: const Offset(0, 5),
               )
@@ -120,16 +120,16 @@ class _MainScreenState extends State<MainScreen> {
             child: Theme(
               data: Theme.of(context).copyWith(
                 splashFactory: NoSplash.splashFactory,
-                highlightColor: Colors.transparent, // Cleaner look on tap
+                highlightColor: Colors.transparent,
               ),
               child: BottomNavigationBar(
                 currentIndex: _pageIndex,
                 onTap: _onNavTap,
-                type: BottomNavigationBarType.fixed, // Essential for 4+ items
+                type: BottomNavigationBarType.fixed,
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 selectedItemColor: Theme.of(context).primaryColor,
-                unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                unselectedItemColor: Theme.of(context).colorScheme.onSurface,
                 selectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.bold),
                 unselectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.normal),
                 items: _bottomNavItems(),
@@ -151,11 +151,11 @@ class _MainScreenState extends State<MainScreen> {
         onDestinationSelected: _onNavTap,
         labelType: NavigationRailLabelType.all,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        indicatorColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        indicatorColor: Theme.of(context).primaryColor,
         selectedIconTheme: IconThemeData(color: Theme.of(context).primaryColor, size: 26),
-        unselectedIconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6), size: 24),
+        unselectedIconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface, size: 24),
         selectedLabelTextStyle: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-        unselectedLabelTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+        unselectedLabelTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         destinations: _railDestinations(),
       ),
     );

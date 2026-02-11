@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:gtr/features/search/component/year_card.dart';
+import 'package:gtr/features/search/component/selection_chip.dart';
 
 import '../../../core/widgets/local_image.dart';
-import '../../../core/widgets/responsive_grid_view.dart';
+import 'search_sheet_grid.dart';
 import '../../../core/widgets/text.dart';
 import 'custom_radio_row.dart';
 
@@ -169,12 +169,14 @@ class SheetBuilder {
   /// --- YEARS SHEET ---
   Widget buildYears({
     required StateSetter setModalState,
-    required List<String> searchYears,
     required String? selectedMinYear,
     required String? selectedMaxYear,
     required Function(String) onMinUpdate,
     required Function(String) onMaxUpdate,
   }) {
+    final List<String> searchYears = [
+      "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026",
+    ];
     return SafeArea(
       child: FractionallySizedBox(
         heightFactor: 0.9,
@@ -202,7 +204,7 @@ class SheetBuilder {
                       SizedBox(height: 8),
 
                       // 3. Removed Expanded around ResponsiveGrid
-                      ResponsiveGrid(
+                      SearchSheetGrid(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: searchYears.length,
@@ -225,7 +227,7 @@ class SheetBuilder {
                       SizedBox(height: 8),
 
                       // 4. Removed Expanded around the second ResponsiveGrid
-                      ResponsiveGrid(
+                      SearchSheetGrid(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: searchYears.length,
@@ -298,12 +300,14 @@ class SheetBuilder {
   /// --- CAR COLORS SHEET ---
   Widget buildColors({
     required StateSetter setModalState,
-    required List<String> searchColors,
     required String? selectedExteriorColor,
     required String? selectedInteriorColor,
     required Function(String) onExteriorUpdate,
     required Function(String) onInteriorUpdate,
   }) {
+    final List<String> searchColors = [
+      "White", "Black", "Grey", "Silver", "Gold", "Yellow", "Orange", "Brown", "Red", "Blue", "Purple", "Green",
+    ];
     return SafeArea(
       child: FractionallySizedBox(
         heightFactor: 0.9,
@@ -319,10 +323,7 @@ class SheetBuilder {
                 padding: EdgeInsetsGeometry.only(top: 12, bottom: 16, left: 12, right: 12),
                 child: Divider(thickness: 1, color: Theme.of(context).dividerColor),
               ),
-
-              // 1. Use Expanded here to fill the rest of the sheet
               Expanded(
-                // 2. Add a SingleChildScrollView so the whole section scrolls together
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,9 +333,7 @@ class SheetBuilder {
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 8),
-
-                      // 3. Removed Expanded around ResponsiveGrid
-                      ResponsiveGrid(
+                      SearchSheetGrid(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: searchColors.length,
@@ -348,7 +347,6 @@ class SheetBuilder {
                           },
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsetsGeometry.symmetric(vertical: 16),
                         child: Divider(color: Theme.of(context).dividerColor),
@@ -358,7 +356,7 @@ class SheetBuilder {
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 8),
-                      ResponsiveGrid(
+                      SearchSheetGrid(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: searchColors.length,
@@ -372,8 +370,6 @@ class SheetBuilder {
                           },
                         ),
                       ),
-
-                      // Add bottom padding for better scrolling experience
                       SizedBox(height: 20),
                     ],
                   ),

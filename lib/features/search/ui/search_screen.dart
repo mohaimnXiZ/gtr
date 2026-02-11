@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gtr/core/widgets/button.dart';
 import 'package:gtr/core/widgets/local_image.dart';
-import 'package:gtr/core/widgets/responsive_grid_view.dart';
+import 'package:gtr/core/widgets/responsive_grid.dart';
 import 'package:gtr/core/widgets/text.dart';
 import 'package:gtr/core/widgets/text_fields.dart';
-import 'package:gtr/features/search/component/custom_radio_row.dart';
 import 'package:gtr/features/search/component/filter_tile.dart';
 import 'package:gtr/features/search/component/search_product_card.dart';
 import 'package:gtr/features/search/component/sheet_builder.dart';
-import 'package:gtr/features/search/component/year_card.dart';
-import '../component/search_grid.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -26,36 +23,9 @@ class _SearchScreenState extends State<SearchScreen> {
   List<String> _selectedModels = [];
   List<String> _selectedTypes = [];
 
-  List<String> searchYears = [
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-    "2020",
-    "2021",
-    "2022",
-    "2023",
-    "2024",
-    "2025",
-    "2026",
-  ];
   String _selectedMaxYear = "";
   String _selectedMinYear = "";
 
-  List<String> searchColors = [
-    "White",
-    "Black",
-    "Grey",
-    "Silver",
-    "Gold",
-    "Yellow",
-    "Orange",
-    "Brown",
-    "Red",
-    "Blue",
-    "Purple",
-    "Green",
-  ];
   String _selectedInteriorColor = "";
   String _selectedExteriorColor = "";
 
@@ -228,10 +198,11 @@ class _SearchScreenState extends State<SearchScreen> {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 0),
               sliver: SliverToBoxAdapter(
-                child: SearchGrid(
+                child: ResponsiveGrid(
+                  forSearchScreen: true,
                   itemCount: cars.length,
                   itemBuilder: (context, index) {
-                    return cars[index]; // Your SearchProductCard
+                    return cars[index];
                   },
                 ),
               ),
@@ -262,76 +233,88 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: FractionallySizedBox(
         heightFactor: 0.9,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: ListView(
-            children: [
-              const SizedBox(height: 8),
-              Center(
-                child: Container(
-                  width: 44,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
-                    borderRadius: BorderRadius.circular(100),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24))
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).dividerColor,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 18),
+                  _buildMainSheetHeader(context),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Divider(color: Theme.of(context).dividerColor),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ClipRect(
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 14),
+                  children: [
+                    Column(
+                      children: [
+                        FilterTile(
+                          title: "Brands",
+                          subtitle: _selectedBrands.isNotEmpty ? _selectedBrands : ["No brands selected"],
+                          onTap: () => context.pop('brands'),
+                        ),
+                        FilterTile(
+                          title: "Models",
+                          subtitle: _selectedModels.isNotEmpty ? _selectedModels : ["No modals selected"],
+                          onTap: () => context.pop('models'),
+                        ),
+                        FilterTile(
+                          title: "Model Year",
+                          subtitle: [
+                            _selectedMinYear != "" ? _selectedMinYear : "Not specified",
+                            _selectedMaxYear != "" ? _selectedMaxYear : "Not specified",
+                          ],
+                          onTap: () => context.pop('years'),
+                        ),
+                        FilterTile(
+                          title: "Vehicle Type",
+                          subtitle: _selectedTypes.isNotEmpty ? _selectedTypes : ["No type selected"],
+                          onTap: () => context.pop('types'),
+                        ),
+                        FilterTile(
+                          title: "Car Colors",
+                          subtitle: [
+                            _selectedInteriorColor != "" ? _selectedInteriorColor : "Not specified",
+                            _selectedExteriorColor != "" ? _selectedExteriorColor : "Not specified",
+                          ],
+                          onTap: () => context.pop('colors'),
+                        ),
+                        const SizedBox(height: 8),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(text: "Price Range", fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 60),
+                      ],
+                    ),
+                  ]
                 ),
               ),
-              const SizedBox(height: 18),
-              _buildMainSheetHeader(context),
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-                child: Divider(color: Theme.of(context).dividerColor),
-              ),
-              const SizedBox(height: 16),
-              FilterTile(
-                title: "Brands",
-                subtitle: _selectedBrands.isNotEmpty ? _selectedBrands : ["No brands selected"],
-                onTap: () {
-                  context.pop('brands');
-                },
-              ),
-              FilterTile(
-                title: "Models",
-                subtitle: _selectedModels.isNotEmpty ? _selectedModels : ["No modals selected"],
-                onTap: () {
-                  context.pop('models');
-                },
-              ),
-              FilterTile(
-                title: "Model Year",
-                subtitle: [
-                  _selectedMinYear != "" ? _selectedMinYear : "Not specified",
-                  _selectedMaxYear != "" ? _selectedMaxYear : "Not specified",
-                ],
-                onTap: () {
-                  context.pop('years');
-                },
-              ),
-              FilterTile(
-                title: "Vehicle Type",
-                subtitle: _selectedTypes.isNotEmpty ? _selectedModels : ["No type selected"],
-                onTap: () {
-                  context.pop('types');
-                },
-              ),
-              FilterTile(
-                title: "Car Colors",
-                subtitle: [
-                  _selectedInteriorColor != "" ? _selectedInteriorColor : "Not specified",
-                  _selectedExteriorColor != "" ? _selectedExteriorColor : "Not specified",
-                ],
-                onTap: () {
-                  context.pop('colors');
-                },
-              ),
-              const SizedBox(height: 8),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(text: "Price Range", fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 60),
-              Row(
+            ),
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 14, vertical: 8),
+              child: Row(
                 children: [
                   Expanded(
                     child: CustomButton(
@@ -356,16 +339,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   Expanded(
                     child: CustomButton(
                       title: "Apply Filter",
-                      onTap: () {
-                        context.pop();
-                      },
+                      onTap: () => context.pop(),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-            ],
-          ),
+            ),
+            SizedBox(height: 8),
+          ],
         ),
       ),
     );
@@ -412,7 +393,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       'years': (setSubState) => sheetBuilder.buildYears(
         setModalState: setSubState,
-        searchYears: searchYears,
         selectedMinYear: _selectedMinYear,
         selectedMaxYear: _selectedMaxYear,
         onMinUpdate: (val) => _selectedMinYear = val,
@@ -425,7 +405,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       'colors': (setSubState) => sheetBuilder.buildColors(
         setModalState: setSubState,
-        searchColors: searchColors,
         selectedExteriorColor: _selectedExteriorColor,
         selectedInteriorColor: _selectedInteriorColor,
         onExteriorUpdate: (val) => _selectedExteriorColor = val,
@@ -451,11 +430,21 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<String?> _openSheet(BuildContext context, Widget content) {
+    final AnimationController customController = AnimationController(
+      vsync: Navigator.of(context),
+      duration: const Duration(milliseconds: 600),
+      reverseDuration: const Duration(milliseconds: 600),
+    );
+
     return showModalBottomSheet<String>(
       context: context,
+      transitionAnimationController: customController,
       backgroundColor: Colors.white,
+      elevation: 1,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))
+      ),
       builder: (context) => content,
     );
   }

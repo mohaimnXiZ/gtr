@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gtr/core/widgets/app_bar.dart';
-import 'package:gtr/core/widgets/responsive_grid_view.dart';
+import 'package:gtr/features/search/component/search_sheet_grid.dart';
 
 import '../../../core/widgets/local_image.dart';
 import '../../../core/widgets/text.dart';
@@ -19,7 +19,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
       appBar: CustomAppBar(title: 'make an app bar',isBackButtonVisible: true,),
       body: SafeArea(child: Padding(
         padding: EdgeInsets.all(16),
-        child: ResponsiveGrid(itemCount: 40, itemBuilder: (BuildContext context, index){
+        child: SearchSheetGrid(itemCount: 40, itemBuilder: (BuildContext context, index){
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,

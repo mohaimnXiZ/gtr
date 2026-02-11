@@ -41,7 +41,8 @@ class FavoriteProductCard extends StatelessWidget {
           content: CustomText(
             text: "Are you sure you want to remove the $carName from your favorites list?",
             fontSize: 14,
-            maxLines: 4,
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
           ),
           actions: [
             TextButton(

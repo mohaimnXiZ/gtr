@@ -68,10 +68,14 @@ class SelectionChip extends StatelessWidget {
               ),
               const SizedBox(width: 4),
             ],
-            CustomText(
-              text: label,
-              fontSize: 14,
-              fontWeight: FontWeight.bold
+            Flexible(
+              child: CustomText(
+                text: label,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

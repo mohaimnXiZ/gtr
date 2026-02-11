@@ -13,7 +13,6 @@ class ProductCard extends StatelessWidget {
   final String monthlyPrice;
   final String? oldPrice;
   final List<String> tags;
-  final bool isFirstItem;
   final VoidCallback onDetailsTap;
   final VoidCallback onPhoneTap;
   final VoidCallback onWhatsappTap;
@@ -27,7 +26,6 @@ class ProductCard extends StatelessWidget {
     required this.monthlyPrice,
     this.oldPrice,
     required this.tags,
-    this.isFirstItem = false,
     required this.onDetailsTap,
     required this.onPhoneTap,
     required this.onWhatsappTap,
@@ -36,134 +34,163 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: isFirstItem
-            ? const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )
-            : null,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // --- Header Image & Logo ---
-            Stack(
-              children: [
-                LocalImage(
-                  img: carImage,
-                  type: "png",
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  alternativeBorderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                ),
-                Positioned(
-                  left: 8,
-                  bottom: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: LocalImage(
+                      img: carImage,
+                      type: "png",
+                      fit: BoxFit.fitWidth,
                     ),
-                    child: LocalImage(img: carLogo, type: "svg", size: 24),
+                  ),
+                  Positioned(
+                    left: 12,
+                    bottom: -15,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        const double logoSize = 50.0;
+                        return Container(
+                          width: logoSize,
+                          height: logoSize,
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              )
+                            ],
+                          ),
+                          child: LocalImage(
+                            img: carLogo,
+                            type: "svg",
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              Padding(
+                // Added extra top padding (20) to account for the logo overlapping the text area
+                padding: const EdgeInsets.fromLTRB(12, 20, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: CustomText(
+                            text: carName,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                            maxLines: 2,
+                          ),
+                        ),
+                        // ... rest of your code remains exactly the same
+                          const SizedBox(width: 8),
+                          const CircleAvatar(
+                            radius: 16,
+                            backgroundColor: Colors.white,
+                            child: CustomIcon(icon: Iconsax.heart, size: 18),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Tags
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: tags.map((tag) => _buildTag(tag)).toList(),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Pricing
+                      if (oldPrice != null)
+                        CustomText(
+                          text: oldPrice!,
+                          decoration: TextDecoration.lineThrough,
+                          color: Theme.of(context).hintColor,
+                          fontSize: 14,
+                          maxLines: 1,
+                          maxChars: 15,
+                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: _buildPriceText("AED $dailyPrice/Day", context),
+                          ),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            flex: 1,
+                            child: _buildPriceText("AED $monthlyPrice/Mo", context, isEnd: true),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Features
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                            5, (index) => _buildFeatureIcon(Iconsax.bag, "2 Bags")),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
 
+            // --- Action Buttons ---
+            // This is now at the bottom of the Column due to MainAxisAlignment.spaceBetween
             Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+              child: Row(
                 children: [
-                  // --- Title & Favorite ---
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomText(
-                          text: carName,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: CustomIcon(icon: Iconsax.heart),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-
-                  // --- Tags ---
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: tags.map((tag) => _buildTag(tag)).toList(),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // --- Pricing ---
-                  if (oldPrice != null)
-                    CustomText(
-                      text: oldPrice!,
-                      decoration: TextDecoration.lineThrough,
-                      color: Theme.of(context).hintColor,
+                  Expanded(
+                    flex: 4,
+                    child: CustomButton(
+                      onTap: onDetailsTap,
+                      title: "Car Details",
                     ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildPriceText("AED $dailyPrice/Day", context),
-                      _buildPriceText("AED $monthlyPrice/Mo", context, isEnd: true),
-                    ],
                   ),
-                  const SizedBox(height: 16),
-
-                  // --- Features Row ---
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(5, (index) => _buildFeatureIcon(Iconsax.bag, "2 Bags")),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // --- Action Buttons ---
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: CustomButton(
-                          onTap: onDetailsTap,
-                          title: "Car Details",
-                          verticalPadding: 10,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      _buildIconButton("phone", const Color(0xFF777777), onPhoneTap),
-                      const SizedBox(width: 8),
-                      _buildIconButton("whatsapp", const Color(0xFF25D366), onWhatsappTap),
-                    ],
-                  ),
+                  const SizedBox(width: 8),
+                  _buildIconButton("phone", const Color(0xFF777777), onPhoneTap),
+                  const SizedBox(width: 8),
+                  _buildIconButton("whatsapp", const Color(0xFF25D366), onWhatsappTap),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
-  // --- Helper Builders to keep build() clean ---
-
+  // --- Helpers ---
   Widget _buildTag(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -176,14 +203,13 @@ class ProductCard extends StatelessWidget {
   }
 
   Widget _buildPriceText(String text, BuildContext context, {bool isEnd = false}) {
-    return Expanded(
-      child: CustomText(
-        text: text,
-        color: Theme.of(context).primaryColor,
-        fontWeight: FontWeight.w800,
-        textAlign: isEnd ? TextAlign.end : TextAlign.start,
-        fontSize: 16,
-      ),
+    return CustomText(
+      text: text,
+      color: Theme.of(context).primaryColor,
+      fontWeight: FontWeight.bold,
+      textAlign: isEnd ? TextAlign.end : TextAlign.start,
+      fontSize: 16,
+      maxLines: 1,
     );
   }
 
@@ -191,23 +217,25 @@ class ProductCard extends StatelessWidget {
     return Flexible(
       child: Column(
         children: [
-          CustomIcon(icon: icon),
+          CustomIcon(icon: icon, size: 20),
           const SizedBox(height: 4),
-          CustomText(text: label, fontSize: 11),
+          FittedBox(child: CustomText(text: label, fontSize: 11)),
         ],
       ),
     );
   }
 
   Widget _buildIconButton(String icon, Color color, VoidCallback tap) {
-    return Flexible(
+    return Expanded(
       flex: 1,
-      child: CustomButton(
-        onTap: tap,
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-        verticalPadding: 10,
-        child: LocalImage(img: icon, type: "svg", size: 24),
+      child: SizedBox(
+        height: 48,
+        child: CustomButton(
+          onTap: tap,
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+          child: Center(child: LocalImage(img: icon, type: "svg", size: 24)),
+        ),
       ),
     );
   }

@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
 
-class SearchGrid extends StatelessWidget {
+class ResponsiveGrid extends StatelessWidget {
   final int itemCount;
   final Widget Function(BuildContext context, int index) itemBuilder;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
   final EdgeInsets padding;
+  final bool forHomeScreen;
+  final bool forFavoriteScreen;
+  final bool forSearchScreen;
 
-  const SearchGrid({
+  const ResponsiveGrid({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
     this.crossAxisSpacing = 16,
     this.mainAxisSpacing = 16,
     this.padding = const EdgeInsets.all(16),
+    this.forHomeScreen = false,
+    this.forFavoriteScreen = false,
+    this.forSearchScreen = false,
   });
 
-  int _calculateColumns(double width) {
+  int _calculateColumnsDefault(double width) {
+    if (width < 600) return 1;
+    if (width < 1000) return 2;
+    if (width < 1400) return 3;
+    return 4;
+  }
+
+  int _calculateColumnsForHome(double width) {
+    if (width < 600) return 1;
+    if (width < 1000) return 2;
+    if (width < 1400) return 3;
+    return 4;
+  }
+
+  int _calculateColumnsForFavorite(double width) {
+    if (width < 600) return 1;
+    if (width < 1000) return 2;
+    if (width < 1400) return 3;
+    return 4;
+  }
+
+  int _calculateColumnsForSearch(double width) {
     if (width < 600) return 1;
     if (width < 1000) return 2;
     if (width < 1400) return 3;
@@ -27,7 +54,13 @@ class SearchGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get width from MediaQuery instead of LayoutBuilder to avoid hit-test nulls
     final double width = MediaQuery.of(context).size.width;
-    final int columns = _calculateColumns(width);
+    final int columns = forHomeScreen
+        ? _calculateColumnsForHome(width)
+        : forFavoriteScreen
+        ? _calculateColumnsForFavorite(width)
+        : forSearchScreen
+        ? _calculateColumnsForSearch(width)
+        : _calculateColumnsDefault(width);
     final List<Widget> rowWidgets = [];
 
     for (int i = 0; i < itemCount; i += columns) {
@@ -62,10 +95,7 @@ class SearchGrid extends StatelessWidget {
 
     return Padding(
       padding: padding,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: rowWidgets,
-      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: rowWidgets),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:gtr/core/widgets/button.dart';
 import 'package:gtr/core/widgets/icon.dart';
 import 'package:gtr/core/widgets/icon_button.dart';
 import 'package:gtr/core/widgets/local_image.dart';
+import 'package:gtr/core/widgets/responsive_grid.dart';
 import 'package:gtr/core/widgets/text.dart';
 import 'package:gtr/core/widgets/text_fields.dart';
 import 'package:gtr/features/home/component/product_card.dart';
@@ -19,6 +20,136 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, dynamic>> carData = [
+    {
+      'carName':
+          'Teaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasla Model 3',
+      'carImage': 'car8',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$95',
+      'monthlyPrice': '\$2,400',
+      'tags': ['Electric', 'Autopilot', 'Premium Audio'],
+      'oldPrice': "false",
+    },
+    {
+      'carName': 'Range Rover Sport',
+      'carImage': 'car7',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$250',
+      'monthlyPrice': '\$6,200',
+      'tags': ['Luxury', '4x4', 'Sunroof'],
+      'oldPrice': "false",
+    },
+    {
+      'carName': 'Toyota Camry',
+      'carImage': 'car6',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$45',
+      'monthlyPrice': '\$1,100',
+      'tags': ['Economic', 'Reliable', 'Hybrid'],
+      'oldPrice': "5000",
+    },
+    {
+      'carName':
+          'Poraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasche 911 Carrera',
+      'carImage': 'car7',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$450',
+      'monthlyPrice': '\$11,000',
+      'tags': ['Sport', 'Turbo', 'Exotic'],
+      'oldPrice': "false",
+    },
+    {
+      'carName': 'Mercedes-Benz G-Wagon',
+      'carImage': 'car8',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$60aaaaaaaaaaaaaaaaaaaaaaaaaaaa0',
+      'monthlyPrice': '\$15,5aaaaa00',
+      'tags': ['Prestige', 'V8', 'Iconic'],
+      'oldPrice': "false",
+    },
+    {
+      'carName': 'BMW 5 Series',
+      'carImage': 'car7',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$110',
+      'monthlyPrice': '\$2,900',
+      'tags': ['Business', 'Leather', 'Smooth'],
+      'oldPrice': "200aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0",
+    },
+    {
+      'carName': 'Ford Mustang GT',
+      'carImage': 'car6',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$130',
+      'monthlyPrice': '\$3,200',
+      'tags': [
+        'Muscle',
+        'V8',
+        'Fast',
+        'memememe',
+        "meme",
+        'memememememe',
+        'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm',
+        'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk',
+        'lllllllllllllllllllllllllllllllllllllllllllllll',
+        "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+        'lllllllllllllllllllllllllllllllllllllllllllllllllll',
+      ],
+      'oldPrice': "2000000000000000000000000000000000000000000000000000000000000000",
+    },
+    {
+      'carName': 'Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaudi Q7',
+      'carImage': 'car8',
+      'carLogo': 'car-logo',
+      'dailyPrice':
+          '\$16aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0',
+      'monthlyPrice':
+          '\$4,1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa00',
+      'tags': [
+        'Famaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaily',
+        '7-Seaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaater',
+        'Quaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaattro',
+      ],
+      'oldPrice': "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    },
+    {
+      'carName': 'Jeep Wrangler',
+      'carImage': 'car7',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$85',
+      'monthlyPrice': '\$2,100',
+      'tags': ['Adventure', 'Convertible', 'Offroad'],
+      'oldPrice': "500",
+    },
+    {
+      'carName': 'Hyundai Elantra',
+      'carImage': 'car6',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$40',
+      'monthlyPrice': '\$950',
+      'tags': ['Compact', 'Budget', 'Fuel Efficient'],
+      'oldPrice': "70",
+    },
+    {
+      'carName': 'Nissan Patrol',
+      'carImage': 'car6',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$180',
+      'monthlyPrice': '\$4,800',
+      'tags': ['Desert King', 'Spacious', 'Powerful'],
+      'oldPrice': "false",
+    },
+    {
+      'carName': 'Lexus ES 350',
+      'carImage': 'car4',
+      'carLogo': 'car-logo',
+      'dailyPrice': '\$90',
+      'monthlyPrice': '\$2,300',
+      'tags': ['Comfort', 'Quiet', 'Premium'],
+      'oldPrice': "false",
+    },
+  ];
   final GlobalKey _stationaryKey = GlobalKey();
   final GlobalKey _movingKey = GlobalKey();
   final TextEditingController _search = TextEditingController();
@@ -189,37 +320,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: themeColor,
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            floating: true,
-            delegate: SlidingAppBarDelegate(
-              stationaryHeight: _stationaryHeight,
-              movingHeight: _movingHeight,
-              stationaryChild: _buildStationaryPart(),
-              movingChild: _buildMovingPart(),
-              statusBarHeight: MediaQuery.of(context).padding.top,
-              backgroundColor: themeColor,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => ProductCard(
-                carName: "Ferrari Convertible",
-                carImage: "car4",
-                carLogo: "car-logo",
-                dailyPrice: "18000",
-                monthlyPrice: "13204",
-                tags: ["sport", "good", "fast"],
-                onDetailsTap: () {},
-                onPhoneTap: () {},
-                onWhatsappTap: () {},
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverPersistentHeader(
+              pinned: true,
+              floating: true,
+              delegate: SlidingAppBarDelegate(
+                stationaryHeight: _stationaryHeight,
+                movingHeight: _movingHeight,
+                stationaryChild: _buildStationaryPart(),
+                movingChild: _buildMovingPart(),
+                statusBarHeight: MediaQuery.of(context).padding.top,
+                backgroundColor: themeColor,
               ),
-              childCount: 6,
             ),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ResponsiveGrid(
+                      forHomeScreen: true,
+                      itemCount: carData.length,
+                      itemBuilder: (BuildContext context, index) {
+                        final car = carData[index];
+                        return ProductCard(
+                          carName: car['carName'],
+                          carImage: car['carImage'],
+                          carLogo: car['carLogo'],
+                          dailyPrice: car['dailyPrice'],
+                          monthlyPrice: car['monthlyPrice'],
+                          tags: List<String>.from(car['tags']),
+                          onDetailsTap: () {},
+                          onPhoneTap: () {},
+                          onWhatsappTap: () {},
+                          oldPrice: car['oldPrice'] == "false" ? null : car['oldPrice'],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
