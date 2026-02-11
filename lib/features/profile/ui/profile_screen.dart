@@ -21,7 +21,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: CustomAppBar(
-        isBackButtonVisible: true,
         title: "My Profile",
         titleColor: AppColors.secondaryLight,
         center: true,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:gtr/core/widgets/app_bar.dart';
+import 'package:gtr/core/widgets/text.dart';
+import 'package:gtr/features/favorite/component/favorite_Product_card.dart';
+import 'package:gtr/features/search/component/search_grid.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -9,8 +12,102 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+  final List<Map<String, String>> favoriteCars = [
+    {
+      "name": "Mclaren 750S",
+      "image": "car7",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Ferrari Convertible",
+      "image": "car6",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Mclaren 750S",
+      "image": "car8",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Ferrari Convertible",
+      "image": "car7",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Ferrari Convertible",
+      "image": "car7",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Mclaren 750S",
+      "image": "car8",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+    {
+      "name": "Mclaren 750S",
+      "image": "car7",
+      "price": "2200",
+      "hp": "520",
+      "trans": "Automatic",
+      "seats": "2",
+    },
+  ];
+
+  void _removeItem(int index) {
+    setState(() {
+      favoriteCars.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: const CustomAppBar(title: "My Favorites"),
+      body: SafeArea(
+        child: favoriteCars.isEmpty
+            ? const Center(
+                child: CustomText(text: "No Favorites Yet!", fontWeight: FontWeight.bold, fontSize: 16),
+              )
+            : ListView(
+                children: [
+                  SearchGrid(
+                    itemCount: favoriteCars.length,
+                    itemBuilder: (BuildContext context, index) {
+                      final car = favoriteCars[index];
+                      return FavoriteProductCard(
+                        carName: car["name"]!,
+                        carImage: car["image"]!,
+                        price: car["price"]!,
+                        hp: car["hp"]!,
+                        transmission: car["trans"]!,
+                        seatCount: car["seats"]!,
+                        onRemove: () => _removeItem(index),
+                        onBookTap: () {},
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 80),
+                ],
+              ),
+      ),
+    );
   }
 }

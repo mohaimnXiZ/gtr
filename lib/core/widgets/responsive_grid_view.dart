@@ -4,12 +4,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 class ResponsiveGrid extends StatefulWidget {
   final int itemCount;
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final double childAspectRatio;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
-  final EdgeInsets padding;
   final ScrollPhysics? physics;
 
+  /// Set this to [true] if the grid is inside a ScrollView or Column.
+  final bool shrinkWrap;
+
+  /// Callback for pagination/infinite scroll logic.
   final VoidCallback? onLimitReached;
   final ScrollController? controller;
 
@@ -17,11 +19,10 @@ class ResponsiveGrid extends StatefulWidget {
     super.key,
     required this.itemCount,
     required this.itemBuilder,
-    this.childAspectRatio = 1,
     this.crossAxisSpacing = 12,
     this.mainAxisSpacing = 12,
-    this.padding = const EdgeInsets.all(16),
     this.physics,
+    this.shrinkWrap = false,
     this.onLimitReached,
     this.controller,
   });
@@ -31,39 +32,50 @@ class ResponsiveGrid extends StatefulWidget {
 }
 
 class _ResponsiveGridState extends State<ResponsiveGrid> {
-  late ScrollController _scrollController;
+  ScrollController? _internalController;
+
+  // Getter to determine which controller to use
+  ScrollController? get _effectiveController =>
+      widget.controller ?? _internalController;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = widget.controller ?? ScrollController();
-    _scrollController.addListener(_scrollListener);
+
+    // Only initialize a controller and listener if we aren't shrinkWrapping.
+    // ShrinkWrapped grids are controlled by their parent's scroll view.
+    if (!widget.shrinkWrap) {
+      if (widget.controller == null) {
+        _internalController = ScrollController();
+      }
+      _effectiveController?.addListener(_scrollListener);
+    }
   }
 
   void _scrollListener() {
-    if (!_scrollController.hasClients) return;
+    if (_effectiveController == null || !_effectiveController!.hasClients) return;
 
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
+    final maxScroll = _effectiveController!.position.maxScrollExtent;
+    final currentScroll = _effectiveController!.position.pixels;
 
-    if (currentScroll >= (maxScroll * 0.5)) {
+    // Trigger limit reached when 80% scrolled
+    if (currentScroll >= (maxScroll * 0.8)) {
       widget.onLimitReached?.call();
     }
   }
 
   @override
   void dispose() {
-    if (widget.controller == null) {
-      _scrollController.dispose();
-    }
+    _internalController?.removeListener(_scrollListener);
+    _internalController?.dispose();
     super.dispose();
   }
 
   int _getCrossAxisCount(double width) {
     if (width < 350) return 2;
-    if (width < 600) return 4;
-    if (width < 900) return 6;
-    return 6;
+    if (width < 600) return 3;
+    if (width < 900) return 4;
+    return 5;
   }
 
   @override
@@ -71,13 +83,15 @@ class _ResponsiveGridState extends State<ResponsiveGrid> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = _getCrossAxisCount(constraints.maxWidth);
+
         return MasonryGridView.builder(
-          controller: _scrollController,
-          padding: widget.padding,
+          controller: widget.shrinkWrap ? null : _effectiveController,
           itemCount: widget.itemCount,
           physics: widget.physics,
-          shrinkWrap: widget.physics is NeverScrollableScrollPhysics ? true : false,
-          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount),
+          shrinkWrap: widget.shrinkWrap,
+          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+          ),
           mainAxisSpacing: widget.mainAxisSpacing,
           crossAxisSpacing: widget.crossAxisSpacing,
           itemBuilder: widget.itemBuilder,

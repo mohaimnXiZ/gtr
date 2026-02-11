@@ -15,10 +15,38 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _screens = [HomeScreen(), FavoriteScreen(), SearchScreen(), ProfileScreen()];
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const FavoriteScreen(),
+    const SearchScreen(),
+    const ProfileScreen(),
+  ];
+
   final PageController _pageController = PageController();
   int _pageIndex = 0;
   final double kRailBreakpoint = 900;
+
+  /// Triggered when the user taps a Nav item
+  void _onNavTap(int index) {
+    if (_pageIndex == index) return;
+
+    setState(() {
+      _pageIndex = index;
+    });
+
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  /// Triggered when the PageView scrolls (manually or via animation)
+  void _onPageChanged(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
+  }
 
   List<BottomNavigationBarItem> _bottomNavItems() => const [
     BottomNavigationBarItem(icon: Icon(Iconsax.home), activeIcon: Icon(Iconsax.home_15), label: "Home"),
@@ -34,11 +62,10 @@ class _MainScreenState extends State<MainScreen> {
     NavigationRailDestination(icon: Icon(Iconsax.frame_1), selectedIcon: Icon(Iconsax.frame5), label: Text("Profile")),
   ];
 
-  void _navigate(int index) {
-    setState(() {
-      _pageIndex = index;
-    });
-    _pageController.animateToPage(index, duration: Duration(milliseconds: 150), curve: Curves.easeInOutCubic);
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,12 +78,14 @@ class _MainScreenState extends State<MainScreen> {
           body: Row(
             children: [
               if (showRail) _buildNavigationRail(context),
-
               Expanded(
                 child: Stack(
                   children: [
-                    PageView(controller: _pageController, onPageChanged: _navigate, children: _screens),
-
+                    PageView(
+                      controller: _pageController,
+                      onPageChanged: _onPageChanged,
+                      children: _screens,
+                    ),
                     if (!showRail) _buildBottomNav(context),
                   ],
                 ),
@@ -70,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomNav(BuildContext context) {
     return Positioned(
-      bottom: 8,
+      bottom: 16, // Increased slightly for better visual balance
       left: 24,
       right: 24,
       child: SafeArea(
@@ -78,36 +107,32 @@ class _MainScreenState extends State<MainScreen> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(100),
-            boxShadow: [BoxShadow(color: Colors.black.withAlpha(26), blurRadius: 20, offset: const Offset(0, -1))],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 5),
+              )
+            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: MediaQuery.removePadding(
-              context: context,
-              removeBottom: true,
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  splashFactory: NoSplash.splashFactory,
-                  highlightColor: Theme.of(context).colorScheme.primary.withAlpha(64),
-                  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    enableFeedback: false,
-                    selectedItemColor: Theme.of(context).primaryColor,
-                    unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-                    selectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.bold),
-                    unselectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.normal),
-                    showSelectedLabels: true,
-                    showUnselectedLabels: true,
-                  ),
-                ),
-                child: BottomNavigationBar(
-                  currentIndex: _pageIndex,
-                  onTap: _navigate,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  items: _bottomNavItems(),
-                ),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                splashFactory: NoSplash.splashFactory,
+                highlightColor: Colors.transparent, // Cleaner look on tap
+              ),
+              child: BottomNavigationBar(
+                currentIndex: _pageIndex,
+                onTap: _onNavTap,
+                type: BottomNavigationBarType.fixed, // Essential for 4+ items
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                selectedItemColor: Theme.of(context).primaryColor,
+                unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                selectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.bold),
+                unselectedLabelStyle: const TextStyle(fontFamily: fontFamily, fontSize: 12, fontWeight: FontWeight.normal),
+                items: _bottomNavItems(),
               ),
             ),
           ),
@@ -120,17 +145,19 @@ class _MainScreenState extends State<MainScreen> {
     return Theme(
       data: Theme.of(context).copyWith(
         splashFactory: NoSplash.splashFactory,
-        navigationRailTheme: NavigationRailThemeData(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          indicatorColor: Colors.transparent,
-          labelType: NavigationRailLabelType.all,
-          selectedIconTheme: IconThemeData(color: Theme.of(context).primaryColor, size: 26),
-          unselectedIconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface, size: 24),
-          selectedLabelTextStyle: const TextStyle(fontFamily: fontFamily, fontWeight: FontWeight.bold),
-          unselectedLabelTextStyle: const TextStyle(fontFamily: fontFamily),
-        ),
       ),
-      child: NavigationRail(selectedIndex: _pageIndex, onDestinationSelected: _navigate, destinations: _railDestinations()),
+      child: NavigationRail(
+        selectedIndex: _pageIndex,
+        onDestinationSelected: _onNavTap,
+        labelType: NavigationRailLabelType.all,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        indicatorColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        selectedIconTheme: IconThemeData(color: Theme.of(context).primaryColor, size: 26),
+        unselectedIconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6), size: 24),
+        selectedLabelTextStyle: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+        unselectedLabelTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+        destinations: _railDestinations(),
+      ),
     );
   }
 }

@@ -4,7 +4,8 @@ import '../../../core/widgets/text.dart';
 
 class FilterTile extends StatelessWidget {
   final String title;
-  final String subtitle;
+  // 1. Changed type from String to List<String>
+  final List<String> subtitle;
   final String iconName;
   final VoidCallback onTap;
 
@@ -18,6 +19,9 @@ class FilterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 2. Helper variable to join the list with commas
+    final String subtitleText = subtitle.join(', ');
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
@@ -48,9 +52,10 @@ class FilterTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     CustomText(
-                      text: subtitle.isEmpty ? "Select $title" : subtitle,
+                      // 3. Logic remains similar, but uses the joined string
+                      text: subtitleText.isEmpty ? "Select $title" : subtitleText,
                       fontSize: 14,
-                      color: subtitle.isEmpty
+                      color: subtitleText.isEmpty
                           ? Theme.of(context).hintColor
                           : null,
                       overflow: TextOverflow.ellipsis,

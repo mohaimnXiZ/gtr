@@ -7,9 +7,9 @@ class SearchProductCard extends StatefulWidget {
   final String carName;
   final String carImage;
   final String price;
-  final String hp;         // Pass just the number, e.g., "577"
+  final String hp;
   final String transmission;
-  final String seatCount;  // Pass just the number, e.g., "4"
+  final String seatCount;
   final bool initialFavorite;
   final Function(bool)? onFavoriteChanged;
   final VoidCallback onBookTap;
@@ -63,86 +63,108 @@ class _SearchProductCardState extends State<SearchProductCard> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
+    return Container(
+      // Decoration for the card background
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          // mainAxisSize.max is essential here so the card expands
+          // to the height provided by the IntrinsicHeight in SearchGrid
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 1. Car Image
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: LocalImage(
+                img: widget.carImage,
+                type: "png",
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // 2. Title & Favorite
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: CustomText(
+                    text: widget.carName,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _buildFavoriteButton(),
+              ],
+            ),
+
+            const SizedBox(height: 4),
+
+            // 3. Price
+            CustomText(
+              text: "\$${widget.price}/day",
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+              maxLines: 1,
+            ),
+
+            const SizedBox(height: 16),
+
+            // 4. Specs Tags
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: [
+                _buildFixedTag("engine", "${widget.hp} hp"),
+                _buildFixedTag("gear", widget.transmission),
+                _buildFixedTag("seat", "${widget.seatCount} seats"),
+              ],
+            ),
+
+            // 5. Dynamic Expansion
+            // This Spacer pushes the button to the bottom if the row's
+            // tallest item is taller than this specific card's content.
+            const Spacer(),
+            const SizedBox(height: 20),
+
+            // 6. Action Button
+            CustomButton(
+              title: "Book Now",
+              onTap: widget.onBookTap,
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              LocalImage(img: widget.carImage, type: "png"),
-              const SizedBox(height: 24),
+      ),
+    );
+  }
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: CustomText(
-                      text: widget.carName,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: _toggleFavorite,
-                    child: ScaleTransition(
-                      scale: Tween(begin: 1.0, end: 1.3).animate(
-                        CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-                      ),
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          _isFavorite ? Icons.favorite : Icons.favorite_border,
-                          size: 18,
-                          color: _isFavorite ? Colors.red : Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "\$${widget.price}/day",
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // --- Wrapping Tags with Appended Units ---
-              SizedBox(
-                width: double.infinity,
-                child: Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  alignment: WrapAlignment.start,
-                  children: [
-                    _buildFixedTag("engine", "${widget.hp} hp"),
-                    _buildFixedTag("gear", widget.transmission),
-                    _buildFixedTag("seat", "${widget.seatCount} seats"),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-              CustomButton(
-                title: "Book Now",
-                onTap: widget.onBookTap,
-              ),
-            ],
+  Widget _buildFavoriteButton() {
+    return GestureDetector(
+      onTap: _toggleFavorite,
+      child: ScaleTransition(
+        scale: Tween(begin: 1.0, end: 1.3).animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          ),
+          child: Icon(
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            size: 20,
+            color: _isFavorite ? Colors.red : Colors.grey,
           ),
         ),
       ),
@@ -150,21 +172,30 @@ class _SearchProductCardState extends State<SearchProductCard> with SingleTicker
   }
 
   Widget _buildFixedTag(String iconName, String value) {
-    return IntrinsicWidth(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(100)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LocalImage(img: iconName, type: "svg", size: 16, fit: BoxFit.contain),
-            const SizedBox(width: 6),
-            CustomText(text: value, fontSize: 12),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsetsGeometry.only(bottom: 6),
+            child: LocalImage(img: iconName, type: "svg", size: 18),
+          ),
+          const SizedBox(width: 4),
+          Flexible(
+            child: CustomText(
+              text: value,
+              fontSize: 11,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
