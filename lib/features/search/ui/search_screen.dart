@@ -238,7 +238,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24))
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: Column(
                 children: [
@@ -308,7 +308,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         const SizedBox(height: 60),
                       ],
                     ),
-                  ]
+                  ],
                 ),
               ),
             ),
@@ -337,10 +337,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: CustomButton(
-                      title: "Apply Filter",
-                      onTap: () => context.pop(),
-                    ),
+                    child: CustomButton(title: "Apply Filter", onTap: () => context.pop()),
                   ),
                 ],
               ),
@@ -442,9 +439,7 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: Colors.white,
       elevation: 1,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) => content,
     );
   }
